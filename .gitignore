@@ -1,3 +1,5 @@
 .env
 jod.py
 geckodriver.log
+listo.csv
+res.csv
