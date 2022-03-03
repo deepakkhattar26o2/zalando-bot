@@ -4,6 +4,17 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.support import expected_conditions as EC
+
+proxy = '88.198.50.103:8080'
+firefox_capabilities = webdriver.DesiredCapabilities.FIREFOX
+firefox_capabilities['marionette'] = True
+
+firefox_capabilities['proxy'] = {
+    "proxyType": "MANUAL",
+    "httpProxy": proxy,
+    "sslProxy": proxy
+}
+
 s = Service(r'E:\geckodriver.exe')
 file = open('listo.csv')
 filename = 'res.csv'
@@ -19,9 +30,9 @@ with open(filename, 'w', newline="") as file:
     csvwriter = csv.writer(file)
     csvwriter.writerow(['Email','Password','LOGIN_STATUS','CART_STATUS'])
     for row in csvreader :
-        driver = webdriver.Firefox(service=s)
+        driver = webdriver.Firefox(service=s, capabilities= firefox_capabilities)
+        driver.get('https://en.zalando.de/')
         try:
-            driver.get('https://en.zalando.de/')
             driver.get('https://en.zalando.de/login/')
             element = WebDriverWait(driver, 10).until(
                 EC.presence_of_element_located((By.ID, 'login.email'))
