@@ -4,15 +4,14 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.support import expected_conditions as EC
+from seleniumwire import webdriver as wd
 
-proxy = '88.198.50.103:8080'
-firefox_capabilities = webdriver.DesiredCapabilities.FIREFOX
-firefox_capabilities['marionette'] = True
-
-firefox_capabilities['proxy'] = {
-    "proxyType": "MANUAL",
-    "httpProxy": proxy,
-    "sslProxy": proxy
+options = {
+'proxy': {
+    'http': 'http://mr7081aCjw:Mw7qvE1CMO@ultra.marsproxies.com:12323',
+    'https':'https://mr7081aCjw:Mw7qvE1CMO@ultra.marsproxies.com:12323',
+    'no_proxy': 'localhost,127.0.0.1,dev_server:8080'
+    }
 }
 
 s = Service(r'E:\geckodriver.exe')
@@ -30,11 +29,11 @@ with open(filename, 'w', newline="") as file:
     csvwriter = csv.writer(file)
     csvwriter.writerow(['Email','Password','LOGIN_STATUS','CART_STATUS'])
     for row in csvreader :
-        driver = webdriver.Firefox(service=s, capabilities= firefox_capabilities)
+        driver = wd.Firefox(service = s, seleniumwire_options=options)
         driver.get('https://en.zalando.de/')
         try:
             driver.get('https://en.zalando.de/login/')
-            element = WebDriverWait(driver, 10).until(
+            element = WebDriverWait(driver, 30).until(
                 EC.presence_of_element_located((By.ID, 'login.email'))
             )
             # driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
@@ -47,7 +46,7 @@ with open(filename, 'w', newline="") as file:
             driver.close()
             continue
         try:
-            element = WebDriverWait(driver, 10).until(
+            element = WebDriverWait(driver, 30).until(
                 EC.presence_of_element_located(
                     (By.XPATH, '//div[@data-testid="login_error_notification"]'))
             )
@@ -59,7 +58,7 @@ with open(filename, 'w', newline="") as file:
             print('DEVLOG Logged In Successfully')
 
         try:
-            element = WebDriverWait(driver, 20).until(
+            element = WebDriverWait(driver, 30).until(
                 EC.presence_of_element_located(
                     (By.XPATH, '//button[@id="uc-btn-accept-banner"]'))
             )
@@ -91,7 +90,7 @@ with open(filename, 'w', newline="") as file:
         print('DEVLOG Product Page Reached!')
 
         try:
-            element = WebDriverWait(driver, 10).until(
+            element = WebDriverWait(driver, 30).until(
                 EC.presence_of_element_located(
                     (By.XPATH, '//button[@id="picker-trigger"]'))
             )
@@ -112,7 +111,7 @@ with open(filename, 'w', newline="") as file:
         print('DEVLOG List Opened')
 
         try:
-            element = WebDriverWait(driver, 10).until(
+            element = WebDriverWait(driver, 30).until(
                 EC.presence_of_element_located(
                     (By.XPATH, '//label[contains(@for, "size-picker-")]'))
             )
@@ -127,7 +126,7 @@ with open(filename, 'w', newline="") as file:
         print('DEVLOG Length of List : ', len(shoe_list))
 
         try:
-            element = WebDriverWait(driver, 10).until(
+            element = WebDriverWait(driver, 30).until(
                 EC.presence_of_element_located(
                     (By.XPATH, "//span[text()='Notify Me']"))
             )
@@ -165,7 +164,7 @@ with open(filename, 'w', newline="") as file:
         print('DEVLOG Cart Page Reached!')
 
         try:
-            element = WebDriverWait(driver, 10).until(
+            element = WebDriverWait(driver, 30).until(
                 EC.presence_of_element_located(
                     (By.XPATH, "//h4[@class='z-2-text z-coast-base__article__name z-2-text-body-small-regular z-2-text-gray' and  text()='WS327 - Trainers - dark violet/glow']"))
             )
